@@ -28,7 +28,7 @@ class Sidebar extends StatelessWidget {
           const SizedBox(height: 8),
 
           const Text(
-            "Peddu you & Peddu me",
+            "Peddu you & Peddu me 💙",
             style: TextStyle(color: AppColors.secondaryText, fontSize: 14),
           ),
 

@@ -17,7 +17,30 @@ class ChatHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CircleAvatar(radius: 22, child: Icon(Icons.person)),
+          Stack(
+            children: [
+              //avatar
+              const CircleAvatar(
+                radius: 24,
+                backgroundColor: Colors.white24,
+                child: Icon(Icons.person),
+              ),
+
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: AppColors.online,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.primaryCard, width: 2),
+                  ),
+                ),
+              ),
+            ],
+          ),
 
           const SizedBox(width: 16),
 

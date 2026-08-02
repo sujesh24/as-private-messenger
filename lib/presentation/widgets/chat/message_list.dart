@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/dummy_data.dart';
 import 'date_separator.dart';
 import 'message_bubble.dart';
 
@@ -8,33 +9,23 @@ class MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 20),
-      children: const [
-        DateSeparator(text: "Today"),
+      itemCount: messages.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return const DateSeparator(text: "Today");
+        }
 
-        MessageBubble(message: "Hey 👋", time: "9:30 PM", isMe: false),
+        final message = messages[index - 1];
 
-        MessageBubble(
-          message: "Hii 😊",
-          time: "9:31 PM",
-          isMe: true,
-          isRead: true,
-        ),
-
-        MessageBubble(
-          message: "Finished today's drawing?",
-          time: "9:32 PM",
-          isMe: false,
-        ),
-
-        MessageBubble(
-          message: "Almost! I'll send it in a bit 🎨",
-          time: "9:33 PM",
-          isMe: true,
-          isRead: false,
-        ),
-      ],
+        return MessageBubble(
+          message: message.message,
+          time: message.time,
+          isMe: message.isMe,
+          isRead: message.isRead,
+        );
+      },
     );
   }
 }
