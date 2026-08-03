@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../models/message_model.dart';
 import '../../../providers/chat_provider.dart';
+import 'package:intl/intl.dart';
 
 class MessageInput extends ConsumerStatefulWidget {
   const MessageInput({super.key});
@@ -29,7 +30,12 @@ class _MessageInputState extends ConsumerState<MessageInput> {
     ref
         .read(chatProvider)
         .sendMessage(
-          MessageModel(message: text, time: "Now", isMe: true, isRead: false),
+          MessageModel(
+            message: text,
+            time: DateFormat('h:mm a').format(DateTime.now()),
+            isMe: true,
+            isRead: false,
+          ),
         );
 
     _controller.clear();
