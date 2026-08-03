@@ -5,14 +5,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'date_separator.dart';
 import 'message_bubble.dart';
 
-class MessageList extends ConsumerWidget {
+class MessageList extends ConsumerStatefulWidget {
   const MessageList({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MessageList> createState() => _MessageListState();
+}
+
+class _MessageListState extends ConsumerState<MessageList> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final messages = ref.watch(chatProvider).getMessages();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+
     return ListView.builder(
+      controller: _scrollController,
       padding: const EdgeInsets.symmetric(vertical: 20),
       itemCount: messages.length + 1,
       itemBuilder: (context, index) {
