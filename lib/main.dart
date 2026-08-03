@@ -1,9 +1,10 @@
 import 'package:as_private_messenger/core/theme/app_theme.dart';
 import 'package:as_private_messenger/presentation/pages/chat/chat_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
