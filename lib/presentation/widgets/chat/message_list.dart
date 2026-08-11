@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/constants/dummy_data.dart';
 import 'date_separator.dart';
 import 'message_bubble.dart';
 
@@ -25,34 +24,53 @@ class _MessageListState extends ConsumerState<MessageList> {
 
   @override
   Widget build(BuildContext context) {
-    final messages = ref.watch(chatProvider).getMessages();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-
-    return ListView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      itemCount: messages.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return const DateSeparator(text: "Today");
+    return StreamBuilder(
+      stream: ref.watch(chatProvider).getMessages(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
         }
 
-        final message = messages[index - 1];
+        if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
+        }
 
-        return MessageBubble(
-          message: message.message,
-          time: DateFormat.jm().format(message.createdAt.toDate()),
-          isMe: message.senderId == currentUser.id,
-          isRead: message.isRead,
+        final messages = snapshot.data ?? [];
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+
+        if (messages.isEmpty) {
+          return const Center(
+            child: Text("No messages yet", style: TextStyle(fontSize: 16)),
+          );
+        }
+
+        return ListView.builder(
+          controller: _scrollController,
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          itemCount: messages.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return const DateSeparator(text: "Today");
+            }
+
+            final message = messages[index - 1];
+
+            return MessageBubble(
+              message: message.message,
+              time: DateFormat.jm().format(message.createdAt.toDate()),
+              isMe: message.senderId == "sujesh",
+              isRead: message.isRead,
+            );
+          },
         );
       },
     );

@@ -1,17 +1,18 @@
+import 'package:as_private_messenger/core/services/firestore_service.dart';
+import 'package:as_private_messenger/models/message_model.dart';
 import 'package:flutter/material.dart';
 
-import '../constants/dummy_data.dart';
-import '../../models/message_model.dart';
-
 class ChatService extends ChangeNotifier {
-  final List<MessageModel> _messages = List.from(messages);
+  final FirestoreService _firestoreService = FirestoreService();
 
-  List<MessageModel> getMessages() {
-    return _messages;
+  Stream<List<MessageModel>> getMessages() {
+    return _firestoreService.getMessages();
   }
 
-  void sendMessage(MessageModel message) {
-    _messages.add(message);
-    notifyListeners();
+  Future<void> sendMessage({
+    required String senderId,
+    required String message,
+  }) async {
+    await _firestoreService.sendMessage(senderId: senderId, message: message);
   }
 }

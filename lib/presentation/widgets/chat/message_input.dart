@@ -1,11 +1,8 @@
 import 'package:as_private_messenger/providers/chat_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/dummy_data.dart';
-import '../../../models/message_model.dart';
 
 class MessageInput extends ConsumerStatefulWidget {
   const MessageInput({super.key});
@@ -23,19 +20,12 @@ class _MessageInputState extends ConsumerState<MessageInput> {
     super.dispose();
   }
 
-  void sendMessage() {
+  Future<void> sendMessage() async {
     final text = _controller.text.trim();
 
     if (text.isEmpty) return;
 
-    ref.read(chatProvider).sendMessage(
-          MessageModel(
-            id: DateTime.now().microsecondsSinceEpoch.toString(),
-            senderId: currentUser.id,
-            message: text,
-            createdAt: Timestamp.now(),
-          ),
-        );
+    await ref.read(chatProvider).sendMessage(senderId: "sujesh", message: text);
 
     _controller.clear();
   }
@@ -67,6 +57,7 @@ class _MessageInputState extends ConsumerState<MessageInput> {
                       color: AppColors.secondaryText,
                     ),
                   ),
+
                   Expanded(
                     child: TextField(
                       controller: _controller,
@@ -79,6 +70,7 @@ class _MessageInputState extends ConsumerState<MessageInput> {
                       onSubmitted: (_) => sendMessage(),
                     ),
                   ),
+
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(
@@ -90,7 +82,9 @@ class _MessageInputState extends ConsumerState<MessageInput> {
               ),
             ),
           ),
+
           const SizedBox(width: 14),
+
           InkWell(
             borderRadius: BorderRadius.circular(30),
             onTap: sendMessage,
