@@ -1,10 +1,11 @@
+import 'package:as_private_messenger/providers/chat_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/dummy_data.dart';
 import '../../../models/message_model.dart';
-import '../../../providers/chat_provider.dart';
-import 'package:intl/intl.dart';
 
 class MessageInput extends ConsumerStatefulWidget {
   const MessageInput({super.key});
@@ -22,19 +23,17 @@ class _MessageInputState extends ConsumerState<MessageInput> {
     super.dispose();
   }
 
-  void _sendMessage() {
+  void sendMessage() {
     final text = _controller.text.trim();
 
     if (text.isEmpty) return;
 
-    ref
-        .read(chatProvider)
-        .sendMessage(
+    ref.read(chatProvider).sendMessage(
           MessageModel(
+            id: DateTime.now().microsecondsSinceEpoch.toString(),
+            senderId: currentUser.id,
             message: text,
-            time: DateFormat('h:mm a').format(DateTime.now()),
-            isMe: true,
-            isRead: false,
+            createdAt: Timestamp.now(),
           ),
         );
 
@@ -44,7 +43,7 @@ class _MessageInputState extends ConsumerState<MessageInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+      padding: const EdgeInsets.all(18),
       decoration: const BoxDecoration(
         color: AppColors.primaryCard,
         border: Border(top: BorderSide(color: AppColors.divider)),
@@ -53,40 +52,58 @@ class _MessageInputState extends ConsumerState<MessageInput> {
         children: [
           Expanded(
             child: Container(
-              height: 54,
+              height: 58,
               decoration: BoxDecoration(
                 color: AppColors.secondaryCard,
                 borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: AppColors.border),
               ),
-              child: TextField(
-                controller: _controller,
-                onSubmitted: (_) => _sendMessage(),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                  hintText: "Type a message...",
-                  prefixIcon: const Icon(Icons.emoji_emotions_outlined),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      // Image picker later
-                    },
-                    icon: const Icon(Icons.attach_file_rounded),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.emoji_emotions_outlined,
+                      color: AppColors.secondaryText,
+                    ),
                   ),
-                ),
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      style: const TextStyle(color: AppColors.primaryText),
+                      decoration: const InputDecoration(
+                        hintText: "Type a message...",
+                        border: InputBorder.none,
+                        isCollapsed: true,
+                      ),
+                      onSubmitted: (_) => sendMessage(),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.attach_file_rounded,
+                      color: AppColors.secondaryText,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          Container(
-            width: 54,
-            height: 54,
-            decoration: const BoxDecoration(
-              color: AppColors.accent,
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              onPressed: _sendMessage,
-              icon: const Icon(Icons.send_rounded, color: Colors.white),
+          const SizedBox(width: 14),
+          InkWell(
+            borderRadius: BorderRadius.circular(30),
+            onTap: sendMessage,
+            child: Ink(
+              width: 56,
+              height: 56,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [AppColors.myMessage, AppColors.myMessageGradient],
+                ),
+              ),
+              child: const Icon(Icons.send_rounded, color: Colors.white),
             ),
           ),
         ],

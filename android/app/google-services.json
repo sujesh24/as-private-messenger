@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1036734033739",
+    "project_id": "as-private-messenger",
+    "storage_bucket": "as-private-messenger.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036734033739:android:00fe1f72d24956ca1d82ce",
+        "android_client_info": {
+          "package_name": "com.example.as_private_messenger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6k9Ho5K5bcfLePFwwvm_JBglRbn9vWrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

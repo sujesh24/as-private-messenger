@@ -1,7 +1,9 @@
 import 'package:as_private_messenger/providers/chat_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
+import '../../../core/constants/dummy_data.dart';
 import 'date_separator.dart';
 import 'message_bubble.dart';
 
@@ -48,8 +50,8 @@ class _MessageListState extends ConsumerState<MessageList> {
 
         return MessageBubble(
           message: message.message,
-          time: message.time,
-          isMe: message.isMe,
+          time: DateFormat.jm().format(message.createdAt.toDate()),
+          isMe: message.senderId == currentUser.id,
           isRead: message.isRead,
         );
       },

@@ -1,5 +1,3 @@
-import 'package:as_private_messenger/core/services/chat_service.dart';
-import 'package:as_private_messenger/models/message_model.dart';
 import 'package:as_private_messenger/presentation/widgets/chat/chat_header.dart';
 import 'package:as_private_messenger/presentation/widgets/chat/message_input.dart';
 import 'package:as_private_messenger/presentation/widgets/chat/message_list.dart';
@@ -16,25 +14,8 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final ChatService _chatService = ChatService();
-  final TextEditingController _messageController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    void sendMessage() {
-      final text = _messageController.text.trim();
-
-      if (text.isEmpty) return;
-
-      _chatService.sendMessage(
-        MessageModel(message: text, time: "Now", isMe: true, isRead: false),
-      );
-
-      _messageController.clear();
-
-      setState(() {});
-    }
-
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
 
