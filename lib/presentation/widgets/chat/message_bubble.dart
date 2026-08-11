@@ -21,9 +21,9 @@ class MessageBubble extends StatelessWidget {
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 420),
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        constraints: const BoxConstraints(maxWidth: 620),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.fromLTRB(16, 10, 10, 7),
         decoration: BoxDecoration(
           gradient: isMe
               ? const LinearGradient(
@@ -47,22 +47,22 @@ class MessageBubble extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
+            Flexible(
               child: Text(
                 message,
                 style: const TextStyle(
                   color: AppColors.primaryText,
                   fontSize: 15,
-                  height: 1.5,
+                  height: 1.45,
                 ),
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(width: 10),
 
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -73,8 +73,7 @@ class MessageBubble extends StatelessWidget {
                 ),
 
                 if (isMe) ...[
-                  const SizedBox(width: 4),
-
+                  const SizedBox(width: 3),
                   Icon(
                     isRead ? Icons.done_all_rounded : Icons.done_rounded,
                     size: 15,
